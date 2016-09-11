@@ -16,7 +16,7 @@
 static const char g_Permissions[] = "0777";
 
 // typedefs //
-typedef void* (cbAtExit(void));
+typedef void* (*cbAtExit)(void);
 
 /// registers a callback when exit() is called if needed to handle stuff
 /// \brief register_exit_callback
@@ -86,8 +86,8 @@ int main(int argc, char* argv[])
         // i need real-uid
         setuid(0);
 
-        int res = mount_filesystem(pwd, "ramfs", "ramfs", 0, 0, 0);
-        //int res = system("mount -t ramfs ramfs `pwd`");
+        //int res = mount_filesystem(pwd, "ramfs", "ramfs", 0, "rw", 0);
+        int res = system("mount -t ramfs ramfs `pwd`");
         if (res == 0) {
             printf("Mount ok\n");
             // convert to octals
