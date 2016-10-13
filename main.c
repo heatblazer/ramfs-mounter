@@ -34,6 +34,13 @@ static void register_exit_callback(cbAtExit ex);
 ///
 static void trim_end(char* str, const char delim, int count);
 
+/// used for dynamic trimming of unknown string size
+/// count delimiters in a string
+/// \brief delimiter_count
+/// \param str
+/// \param delim
+/// \return
+static int delimiter_count(const char* str, char delim);
 
 /// mount filesystem with specific options
 /// \brief mount_filesystem
@@ -79,7 +86,9 @@ int main(int argc, char* argv[])
     while (fgets(buff, 512, mntstatus) != NULL) {
         char* match = strchr(buff, '/');
         // trim 3 whitespaces from the end
-        trim_end(match, ' ', 4); // when parsing mtab
+        int delimiters = delimiter_count(match, ' ');
+        printf("Delimiters are: [%d] on string[%s]\n", delimiters, match);
+        trim_end(match, ' ', delimiters); // when parsing mtab
         if (strcmp(match, pwd)==0) {
             printf("Match: [%s]\n", match);
             matched_result = true;
@@ -134,6 +143,19 @@ void trim_end(char *str, const char delim, int count)
         }
         *end-- = 0;
     }
+}
+
+static int delimiter_count(const char* str, char delim)
+{
+    int i = 0;
+    while (*str != '\0') {
+        if (*str == delim) {
+            i++;
+        }
+        str++;
+    }
+
+    return i;
 }
 
 void dummy_at_exit(void)
