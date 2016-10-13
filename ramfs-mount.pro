@@ -4,7 +4,10 @@ CONFIG -= qt
 
 CONFIG += console
 
-SOURCES += main.c
+HEADERS += utils.h
+
+SOURCES += utils.c \
+            main.c
 
 QMAKE_CFLAGS += \
     -Wextra \

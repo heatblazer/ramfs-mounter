@@ -12,6 +12,9 @@
 // err //
 #include <errno.h>
 
+// helpers //
+#include "utils.h"
+
 // globals //
 static const char g_Permissions[] = "0777";
 
@@ -55,6 +58,11 @@ static int delimiter_count(const char* str, char delim);
 static int mount_filesystem(const char* src, const char* tgt, const char* fstype,
                             unsigned long flags, const char* mode, const char* uid);
 
+struct strlist_t
+{
+    char** list;
+    int size;
+};
 
 int main(int argc, char* argv[])
 {
@@ -83,11 +91,18 @@ int main(int argc, char* argv[])
     // assume no more than 512 chars per line
     char buff[512]={0};
 
+    struct strlist_t s_list = {0, 0};
+
     while (fgets(buff, 512, mntstatus) != NULL) {
-        char* match = strchr(buff, '/');
+        const char* match = strchr2(buff, '/', 1);
         // trim 3 whitespaces from the end
         int delimiters = delimiter_count(match, ' ');
-        trim_end(match, ' ', delimiters); // when parsing mtab
+
+        // trimming an original const string is not good
+        // idea, better to use my split later
+        // to just access second element
+        trim_end((char*) match, ' ', delimiters); // when parsing mtab
+
         if (strcmp(match, pwd)==0) {
             printf("Match: [%s]\n", match);
             matched_result = true;
