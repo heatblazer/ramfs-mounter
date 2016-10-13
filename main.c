@@ -18,6 +18,8 @@ static const char g_Permissions[] = "0777";
 // typedefs //
 typedef void (*cbAtExit)(void);
 
+static void dummy_at_exit(void);
+
 /// registers a callback when exit() is called if needed to handle stuff
 /// \brief register_exit_callback
 /// \param ex - callback to the exit
@@ -50,7 +52,8 @@ static int mount_filesystem(const char* src, const char* tgt, const char* fstype
 int main(int argc, char* argv[])
 {
     (void) argc; // unused
-
+    // avoid compile warinings for unised
+    register_exit_callback(dummy_at_exit);
     bool matched_result = false;
 
     // extra size
@@ -64,7 +67,8 @@ int main(int argc, char* argv[])
     // in order to avoid that process we have to write dirwalker
     // to list all mounted fses but for now will use this one
      FILE* mntstatus = fopen("/etc/mtab", "r");
-     if (!mntstatus) {
+     // make goro happy
+     if (mntstatus == NULL) {
          fprintf(stderr, "Error opening \"/etc/mtab\"!\n");
          exit(3);
      }
@@ -130,6 +134,11 @@ void trim_end(char *str, const char delim, int count)
         }
         *end-- = 0;
     }
+}
+
+void dummy_at_exit(void)
+{
+
 }
 
 
