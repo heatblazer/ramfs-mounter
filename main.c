@@ -87,7 +87,6 @@ int main(int argc, char* argv[])
         char* match = strchr(buff, '/');
         // trim 3 whitespaces from the end
         int delimiters = delimiter_count(match, ' ');
-        printf("Delimiters are: [%d] on string[%s]\n", delimiters, match);
         trim_end(match, ' ', delimiters); // when parsing mtab
         if (strcmp(match, pwd)==0) {
             printf("Match: [%s]\n", match);
