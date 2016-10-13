@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
     while (fgets(buff, 512, mntstatus) != NULL) {
         char* match = strchr(buff, '/');
         // trim 3 whitespaces from the end
-        trim_end(match, ' ', 3);
+        trim_end(match, ' ', 4); // when parsing mtab
         if (strcmp(match, pwd)==0) {
             printf("Match: [%s]\n", match);
             matched_result = true;
