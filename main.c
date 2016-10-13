@@ -85,6 +85,7 @@ int main(int argc, char* argv[])
         // i need real-uid
         setuid(0);
 
+        // now correctly using the custom function istead of system
         int res = mount_filesystem("ramfs", pwd, "ramfs", 0, "rw", 0);
         if (res == 0) {
             printf("Mount ok\n");
@@ -128,7 +129,9 @@ void trim_end(char *str, const char delim, int count)
 
 void register_exit_callback(cbAtExit ex)
 {
-    atexit(ex);
+    if (ex) {
+        atexit(ex);
+    }
 }
 
 int mount_filesystem(const char *src, const char *tgt, const char *fstype, unsigned long flags,
