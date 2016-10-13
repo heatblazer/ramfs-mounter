@@ -63,15 +63,12 @@ int main(int argc, char* argv[])
     // The beter way is manual parsing.
     // in order to avoid that process we have to write dirwalker
     // to list all mounted fses but for now will use this one
-#ifdef USE_POPEN
-    FILE* mntstatus = popen("mount", "r");
-#else
      FILE* mntstatus = fopen("/etc/mtab", "r");
      if (!mntstatus) {
          fprintf(stderr, "Error opening \"/etc/mtab\"!\n");
          exit(3);
      }
-#endif
+
     // assume no more than 512 chars per line
     char buff[512]={0};
 
