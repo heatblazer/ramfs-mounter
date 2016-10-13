@@ -64,7 +64,6 @@ int main(int argc, char* argv[])
     // in order to avoid that process we have to write dirwalker
     // to list all mounted fses but for now will use this one
     FILE* mntstatus = popen("mount", "r");
-
     // assume no more than 512 chars per line
     char buff[512]={0};
 
@@ -86,8 +85,7 @@ int main(int argc, char* argv[])
         // i need real-uid
         setuid(0);
 
-        //int res = mount_filesystem(pwd, "ramfs", "ramfs", 0, "rw", 0);
-        int res = system("mount -t ramfs ramfs `pwd`");
+        int res = mount_filesystem("ramfs", pwd, "ramfs", 0, "rw", 0);
         if (res == 0) {
             printf("Mount ok\n");
             // convert to octals
